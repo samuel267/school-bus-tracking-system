@@ -1,13 +1,13 @@
-# School Bus Tracking System
+# SchoolSure — School Bus Tracking System
 > **Role:** Freelance Full-Stack Developer  
-> **Stack:** Laravel · MySQL · Kotlin · Android · Firebase Cloud Messaging · REST APIs · JWT  
+> **Stack:** Laravel · MySQL · Flutter · Firebase Cloud Messaging · REST APIs · JWT  
 > 🔗 **Type:** Freelance client project — deployed in production
 
 ---
 
 ## Overview
 
-A real-time school bus tracking system built for a private school client, giving parents live visibility of their child's status throughout the school day — from home pickup through to school arrival and afternoon drop-off. The system consists of a Laravel backend API and two separate Kotlin Android applications: one for drivers and one for parents.
+A real-time school bus tracking system built for a private school client, giving parents live visibility of their child's status throughout the school day — from home pickup through to school arrival and afternoon drop-off. The system consists of a Laravel backend API and two separate Flutter mobile applications: one for drivers and one for parents.
 
 ---
 
@@ -37,19 +37,19 @@ at_home → picked_up → on_route → arrived_at_school → ready_for_pickup �
 
 ---
 
-### 2. Kotlin Driver App (Android)
+### 2. Flutter Driver App (iOS & Android)
 The app used by school bus drivers throughout their route.
 
 **Features:**
 - Authenticates against the Laravel API using bearer tokens
 - Loads the driver's assigned route and student list for the day
 - One-tap status update per student at each stop — designed for use while managing a bus
-- Works on low-end Android devices common among drivers
+- Works on both Android and iOS — built with Flutter for cross-platform compatibility
 - Offline-tolerant — status updates queue locally if connectivity drops and sync when reconnected
 
 ---
 
-### 3. Kotlin Parent App (Android)
+### 3. Flutter Parent App (iOS & Android)
 The app used by parents to track their child's status in real time.
 
 **Features:**
@@ -66,7 +66,7 @@ The app used by parents to track their child's status in real time.
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    Client Layer                          │
-│   Driver Android App (Kotlin)  │  Parent Android App    │
+│   Driver App - Flutter (iOS & Android)  │  Parent App - Flutter (iOS & Android)    │
 │   [Status updates]             │  [Status reads + FCM]  │
 └──────────┬──────────────────────────────┬───────────────┘
            │ REST API (Bearer Token)       │
@@ -93,7 +93,7 @@ The app used by parents to track their child's status in real time.
 |---|---|
 | Laravel for backend | Client requirement + strong ecosystem for rapid API development with built-in auth, ORM, and validation |
 | Sanctum over JWT library | Laravel Sanctum is the recommended first-party solution for mobile token auth — simpler and well-maintained |
-| Kotlin for Android | Native Android gave better performance and offline handling than React Native for a low-connectivity environment |
+| Flutter for mobile | Cross-platform delivery — one codebase for both Android and iOS driver and parent apps. Faster development and consistent UI across devices |
 | FCM for push notifications | Free, reliable, and well-supported on Android. Drivers and parents are on Android devices |
 | Role scoping at API level | Enforcing permissions in the API — not just the app UI — means even direct API calls can't access cross-role data |
 | Status event log | Audit trail was a client requirement — parents and school admin needed to review the day's events if a dispute arose |
@@ -105,7 +105,7 @@ The app used by parents to track their child's status in real time.
 **Challenge: Connectivity drops on rural routes**
 Drivers sometimes lost mobile data mid-route. Status updates couldn't be lost.
 
-**Solution:** The driver app queues updates locally in SQLite when offline and syncs them to the Laravel API in order when connectivity restores. The backend accepts out-of-order timestamps and sorts the event log correctly.
+**Solution:** The Flutter driver app queues updates locally when offline and syncs them to the Laravel API in order when connectivity restores. The backend accepts out-of-order timestamps and sorts the event log correctly.
 
 ---
 
@@ -123,14 +123,14 @@ Early testing showed parents occasionally received double notifications when the
 | Students tracked | Full school enrollment |
 | Status updates per day | ~4 per student (pickup + arrival + ready + dropoff) |
 | Parent anxiety calls to school office | Significantly reduced post-launch |
-| Platforms | Android (Driver + Parent apps) |
+| Platforms | Android & iOS (Driver + Parent apps via Flutter) |
 | Notification delivery | Real-time via FCM |
 
 ---
 
 ## What I Learned
 
-This project was my first time building a complete system with **Laravel as the primary backend** and **Kotlin for native Android**. The biggest learning was around **offline-first mobile design** — on a school bus route, connectivity is not guaranteed, and losing a status update is unacceptable. Designing the driver app to queue locally and sync reliably changed how I think about mobile apps in low-connectivity environments. It also reinforced the importance of **role-based access control done at the API level** — not just the UI — because the safety of a child's location data is not something to leave to client-side enforcement.
+This project was my first time building a complete system with **Laravel as the primary backend** and **Flutter for cross-platform mobile**. Building two separate apps — one for drivers, one for parents — from a single Flutter codebase was efficient and kept the UI consistent across both user types. The biggest learning was around **offline-first mobile design** — on a school bus route, connectivity is not guaranteed, and losing a status update is unacceptable. Designing the driver app to queue locally and sync reliably changed how I think about mobile apps in low-connectivity environments. It also reinforced the importance of **role-based access control done at the API level** — not just the UI — because the safety of a child's location data is not something to leave to client-side enforcement.
 
 ---
 
